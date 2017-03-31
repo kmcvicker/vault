@@ -34,6 +34,10 @@ func pathGroups(b *backend) *framework.Path {
 				Type:        framework.TypeString,
 				Description: "Comma-separated list of policies associated to the group.",
 			},
+			"path": &framework.FieldSchema{
+				Type:        framework.TypeString,
+				Description: "Path from the base groupdn to the group,(i.e. ou=Groups,ou=test).",
+			},
 		},
 
 		Callbacks: map[logical.Operation]framework.OperationFunc{
@@ -91,9 +95,31 @@ func (b *backend) pathGroupRead(
 	}, nil
 }
 
+//func (b *backend) pathGroupWrite(req *logical.Request, d *framework.FieldData) (*logical.Response, error) {
+//	if b.Logger().IsDebug() {
+//		b.Logger().Debug("auth/lda pathGroupWrite: data", d.Get("policies"))
+
+	// Store it
+//	entry, err := logical.StorageEntryJSON("group/"+d.Get("name").(string), &GroupEntry{
+//		Policies: policyutil.ParsePolicies(d.Get("policies").(string)),
+//	})
+//	if err != nil {
+//		return nil, err
+//	}
+//	if err := req.Storage.Put(entry); err != nil {
+//		return nil, err
+//	}
+//
+//	return nil, nil
+//}
+
+
 func (b *backend) pathGroupWrite(
 	req *logical.Request, d *framework.FieldData) (*logical.Response, error) {
 	// Store it
+	if b.Logger().IsDebug() {
+		b.Logger().Debug("auth/lda pathGroupWrite: data", d.Get("policies").(string),d.Get("path").(string))
+	}
 	entry, err := logical.StorageEntryJSON("group/"+d.Get("name").(string), &GroupEntry{
 		Policies: policyutil.ParsePolicies(d.Get("policies").(string)),
 	})

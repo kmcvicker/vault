@@ -350,6 +350,10 @@ func (b *backend) getLdapGroups(cfg *ConfigEntry, c *ldap.Conn, userDN string, u
 			cfg.GroupAttr,
 		},
 	})
+	if b.Logger().IsDebug() {
+		b.Logger().Debug("auth/ldap: result",result)
+	}
+
 	if err != nil {
 		return nil, fmt.Errorf("LDAP search failed: %v", err)
 	}
